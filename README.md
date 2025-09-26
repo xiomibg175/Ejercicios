@@ -1,2 +1,5 @@
 # Ejercicios
-Repositorio de Ejercicios actividad 2 Programación Orientada a Objetos
+## Universidad Nacional de Colombia
+## Facultad de Minas
+Briyith Xiomara Bolaños Guauña
+

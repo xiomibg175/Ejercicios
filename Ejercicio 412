@@ -1,0 +1,86 @@
+import tkinter as tk
+from tkinter import messagebox
+import math
+
+class CalculadoraApp(tk.Tk):
+    
+    def __init__(self):
+        super().__init__()
+        self.title("Calculadora")
+        self.geometry("400x200")
+        
+        self.numero_var = tk.StringVar()
+        self.log_var = tk.StringVar()
+        self.raiz_var = tk.StringVar()
+        
+        self.crear_widgets()
+
+    def crear_widgets(self):
+        
+        frame = tk.Frame(self, padx=10, pady=10)
+        frame.pack(expand=True)
+
+        tk.Label(frame, text="Número:").grid(row=0, column=0, padx=5, pady=8, sticky="e")
+        self.entry_numero = tk.Entry(frame, textvariable=self.numero_var, width=30)
+        self.entry_numero.grid(row=0, column=1, padx=5, pady=8)
+
+        tk.Label(frame, text="Logaritmo Neperiano:").grid(row=1, column=0, padx=5, pady=8, sticky="e")
+        self.entry_log = tk.Entry(frame, textvariable=self.log_var, state='readonly', width=30)
+        self.entry_log.grid(row=1, column=1, padx=5, pady=8)
+
+        tk.Label(frame, text="Raíz Cuadrada:").grid(row=2, column=0, padx=5, pady=8, sticky="e")
+        self.entry_raiz = tk.Entry(frame, textvariable=self.raiz_var, state='readonly', width=30)
+        self.entry_raiz.grid(row=2, column=1, padx=5, pady=8)
+
+        frame_botones = tk.Frame(frame)
+        frame_botones.grid(row=3, column=0, columnspan=2, pady=10)
+
+        self.btn_calcular = tk.Button(frame_botones, text="Calcular", command=self.calcular)
+        self.btn_calcular.pack(side=tk.LEFT, padx=10)
+
+        self.btn_limpiar = tk.Button(frame_botones, text="Limpiar", command=self.limpiar)
+        self.btn_limpiar.pack(side=tk.LEFT, padx=10)
+
+    def calcular(self):
+        self.log_var.set("")
+        self.raiz_var.set("")
+
+        try:
+            numero_str = self.numero_var.get()
+            if not numero_str:
+                raise ValueError("El campo 'Número' no puede estar vacío.")
+                
+            numero = float(numero_str)
+
+            try:
+                if numero < 0:
+                    self.raiz_var.set("Error: Dominio (negativo)")
+                else:
+                    raiz = math.sqrt(numero)
+                    self.raiz_var.set(f"{raiz:.6f}")
+            except Exception as e_raiz:
+                self.raiz_var.set(f"Error: {e_raiz}")
+
+            try:
+                if numero <= 0:
+                    self.log_var.set("Error: Dominio (cero o neg.)")
+                else:
+                    log = math.log(numero)
+                    self.log_var.set(f"{log:.6f}")
+            except Exception as e_log:
+                self.log_var.set(f"Error: {e_log}")
+
+        except ValueError as e:
+            messagebox.showerror("Error de Entrada", f"Valor inválido: {e}")
+        
+        except Exception as e:
+            messagebox.showerror("Error Inesperado", f"Ocurrió un error: {e}")
+
+    def limpiar(self):
+        self.numero_var.set("")
+        self.log_var.set("")
+        self.raiz_var.set("")
+
+if __name__ == "__main__":
+    app = CalculadoraApp()
+    app.mainloop()

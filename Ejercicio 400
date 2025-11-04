@@ -1,0 +1,99 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class AppPruebaExcepciones:
+    
+    def __init__(self, root):
+        self.root = root
+        root.title("Prueba de Excepciones (Python)")
+        root.geometry("400x300")
+
+        self.numerador_var = tk.StringVar()
+        self.denominador_var = tk.StringVar()
+        self.resultado_var = tk.StringVar()
+        self.texto_var = tk.StringVar()
+        self.mensaje_numerico_var = tk.StringVar()
+        self.mensaje_texto_var = tk.StringVar()
+
+        tk.Label(root, text="Numerador").grid(row=0, column=0, padx=10, pady=5, sticky="w")
+        tk.Entry(root, textvariable=self.numerador_var).grid(row=0, column=1, padx=10, pady=5)
+
+        tk.Label(root, text="Denominador").grid(row=1, column=0, padx=10, pady=5, sticky="w")
+        tk.Entry(root, textvariable=self.denominador_var).grid(row=1, column=1, padx=10, pady=5)
+
+        tk.Label(root, text="Resultado").grid(row=2, column=0, padx=10, pady=5, sticky="w")
+        tk.Entry(root, textvariable=self.resultado_var, state='readonly').grid(row=2, column=1, padx=10, pady=5)
+
+        tk.Label(root, text="Texto").grid(row=3, column=0, padx=10, pady=5, sticky="w")
+        tk.Entry(root, textvariable=self.texto_var).grid(row=3, column=1, padx=10, pady=5)
+
+        tk.Button(root, text="Calcular", command=self.calcular).grid(row=4, column=0, padx=10, pady=10)
+        tk.Button(root, text="Limpiar", command=self.limpiar).grid(row=4, column=1, padx=10, pady=10)
+
+        tk.Label(root, textvariable=self.mensaje_numerico_var, fg="blue").grid(row=5, column=0, columnspan=2, padx=10, pady=5)
+        tk.Label(root, textvariable=self.mensaje_texto_var, fg="green").grid(row=6, column=0, columnspan=2, padx=10, pady=5)
+
+    def limpiar(self):
+        self.numerador_var.set("")
+        self.denominador_var.set("")
+        self.resultado_var.set("")
+        self.texto_var.set("")
+        self.mensaje_numerico_var.set("")
+        self.mensaje_texto_var.set("")
+        print("\n--- Campos Limpiados ---")
+
+    def calcular(self):
+        
+        try:
+            print("\nIngresando al primer try (consola)")
+            numerador = float(self.numerador_var.get())
+            denominador = float(self.denominador_var.get())
+
+            if denominador == 0:
+                raise ZeroDivisionError("División por cero")
+            
+            resultado = numerador / denominador
+            
+            self.resultado_var.set(f"{resultado:.1f}")
+            self.mensaje_numerico_var.set("Division Valida")
+            print("Después de la división (consola)")
+
+        except ZeroDivisionError as e:
+            print("División por cero (consola)")
+            self.resultado_var.set("Inf")
+            self.mensaje_numerico_var.set("División por cero")
+        
+        except ValueError as e:
+            print(f"Error de valor: {e} (consola)")
+            self.resultado_var.set("Error")
+            self.mensaje_numerico_var.set("Error: Ingrese solo números")
+
+        finally:
+            print("Ingresando al primer finally (consola)")
+
+        
+        try:
+            print("Ingresando al segundo try (consola)")
+            texto = self.texto_var.get()
+            
+            if not texto:
+                objeto = None
+                objeto.lower()
+            
+            self.mensaje_texto_var.set(texto)
+            print("Imprimiendo objeto (consola)")
+
+        except ZeroDivisionError as e:
+            print("División por cero (consola - bloque 2)")
+        
+        except Exception as e:
+            print(f"Ocurrió una excepción: {e} (consola)")
+            self.mensaje_texto_var.set("texto vacio")
+
+        finally:
+            print("Ingresando al segundo finally (consola)")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = AppPruebaExcepciones(root)
+    root.mainloop()
